@@ -8,8 +8,10 @@ export default function Client() {
       <div className="w-full h-full lg:w-[366px] lg:h-[528px]">
         <div className="flex flex-col justify-between rounded-xl h-full w-full">
           <ChatInfo />
-          <ChatContent />
-          <ChatControl />
+          <div className="p-2">
+            <ChatContent />
+            <ChatControl />
+          </div>
         </div>
       </div>
     </div>
