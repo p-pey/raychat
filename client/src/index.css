@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  --color-indigo-200: #5b4dff;
+  --color-white-200: rgba(255, 255, 255, 0.8);
+  --color-black-200: rgba(57, 57, 57, 1);
+  --color-black-500: rgba(0, 0, 0, 0.5);
+  --color-gray-200: #c2c2c2;
+  --color-gray-500: rgba(194, 194, 194, 1);
+  --leading-5: 1.125rem;
+  --spacing-11: 2.625rem;
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  text-align: right;
 }
 html,
 body,

@@ -1,7 +1,7 @@
 export default function Webapp() {
   return (
     <div>
-      <h1>Webapp</h1>
+      <h1>Agent</h1>
     </div>
   );
 }
