@@ -25,3 +25,24 @@ body,
   width: 100vw;
   height: 100vh;
 }
+
+[role="button"], button {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 5px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

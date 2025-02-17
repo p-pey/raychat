@@ -1,16 +1,42 @@
+import { useEffect, useState } from "react";
 import Dialog from "./dialog";
+import { SocketSubscriber } from "../client";
+import ChatMapper from "./chat.mapper";
+export type dialog = {
+  clientId: string;
+  id: string;
+  isFromAgent: boolean;
+  text: string;
+  timestamp: string;
+}
+
 
 export default function ChatContent() {
+  const [ dialogs, setDialogs ] = useState<dialog[]>([]);
+  useEffect(()=> {
+    const unsubscribe = SocketSubscriber.subscribe("message", (data)=> {
+      setDialogs(prev => ChatMapper.mapChatToSortArray([...prev, data as dialog]));
+    });
+    const messagesUnsubscribe = SocketSubscriber.subscribe("messages", (data) => {
+      setDialogs(ChatMapper.mapChatToSortArray(data as dialog[]));
+    })
+    return ()=> {
+      unsubscribe();
+      messagesUnsubscribe()
+    }
+  }, []);
   return (
-    <main className="flex flex-col gap-2">
-      <Dialog isPrimary={false}>
-        ٖسلام. اگر سوالی در مورد رایچت دارید ، از ما بپرسید! 👋
-      </Dialog>
-
-      <Dialog isPrimary>
-        سلام خوبین .چطور میتونم رایچت رو نصب کنم هرکاری میشه کردم ولی با ویجت
-        مشکل دارم نمیوفته روی سایت !
-      </Dialog>
+    <main className="flex flex-col gap-2 max-h-full overflow-auto">
+      {
+        dialogs.map(dialog => {
+          return (
+            <Dialog key={dialog.id} isPrimary={!dialog.isFromAgent}>
+             { dialog.text }
+          </Dialog>
+          )
+        })
+      }
+    
     </main>
   );
 }
