@@ -1,23 +1,32 @@
 import { useEffect } from "react";
 import SocketProxy from "./proxy/socket.proxy";
 import Subscribe from "./utils/subscriber";
+import { dialog } from "./components/chatContent";
 export const SocketSubscriber = new Subscribe();
-const Socket = SocketProxy.connect();
 
 export default function useClient() {
-       useEffect(() => {
-              SocketProxy.register();
-              SocketProxy.getMessages((response) => {
-                     console.log("##############");
-                     SocketSubscriber.publish("messages", response);
-              });
-              console.log("**************");
-              SocketSubscriber.publish("connect", true);
-              Socket.on("message", (response) => {
-                     SocketSubscriber.publish("message", response);
-              });
-              Socket.on("disconnect", () => {
-                     SocketSubscriber.publish("connect", false);
-              });
-       }, []);
+  const handlePublishMessages = (data: {
+    clientId: string;
+    unread: number;
+    messages: dialog[];
+  }) => {
+    SocketSubscriber.publish("messages", data);
+  };
+  useEffect(() => {
+    SocketProxy.register();
+    SocketSubscriber.publish("connect", true);
+    SocketProxy.getMessages((response) => {
+      if (response.success) {
+        handlePublishMessages(response.data);
+      } else {
+        window.alert(response.error);
+      }
+    });
+    SocketProxy.onMessage((response) => {
+      SocketSubscriber.publish("message", response);
+    });
+    SocketProxy.onDisconnect(() => {
+      SocketSubscriber.publish("connect", false);
+    });
+  }, []);
 }

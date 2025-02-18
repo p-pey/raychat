@@ -11,17 +11,21 @@ export type dialog = {
 };
 
 export default function ChatContent() {
-  const [dialogs, setDialogs] = useState<dialog[]>([]);
+  const [dialogs, setDialogs] = useState<dialog[] | null>(null);
   useEffect(() => {
-    const unsubscribe = SocketSubscriber.subscribe("message", (data) => {
+    const unsubscribe = SocketSubscriber.subscribe("message", (response) => {
+      const data = response as dialog;
+      const modifyDialog: dialog = { ...data, timestamp: ChatMapper.convertDate(data.timestamp) }
       setDialogs((prev) =>
-        ChatMapper.mapChatToSortArray([...prev, data as dialog])
+        ChatMapper.mapChatToSortArray([...prev ?? [], modifyDialog])
       );
     });
     const messagesUnsubscribe = SocketSubscriber.subscribe(
       "messages",
-      (data) => {
-        setDialogs(ChatMapper.mapChatToSortArray(data as dialog[]));
+      (response) => {
+        const data = response as { clientId: string, messages: dialog[], unread: number };
+        console.log(data);
+        setDialogs(ChatMapper.mapChatTimeStampToPersianDate(ChatMapper.mapChatToSortArray(data.messages)));
       }
     );
     return () => {
@@ -31,13 +35,14 @@ export default function ChatContent() {
   }, []);
   return (
     <main className="flex flex-col gap-2 max-h-full overflow-auto">
-      {dialogs.map((dialog) => {
+      { dialogs === null ? <h1 className="mx-auto font-medium">... درحال دریافت  </h1> : dialogs.length === 0 ? <h1 className="font-medium text-center m-auto"> اولین پیام را ارسال کنید </h1> : dialogs.map((dialog) => {
         return (
-          <Dialog key={dialog.id} isPrimary={!dialog.isFromAgent}>
+          <Dialog key={dialog.id} date={ dialog.timestamp } isPrimary={!dialog.isFromAgent}>
             {dialog.text}
           </Dialog>
         );
-      })}
+      }) }
+      
     </main>
   );
 }

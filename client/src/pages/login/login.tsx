@@ -1,16 +1,13 @@
 import { FormEventHandler } from "react"
 import { AuthSubscriber } from "../../routes/routes";
-import { useNavigate } from "react-router-dom";
 
 
 
 export default function Login() {
-    const navigate = useNavigate()
     const handleSubmit:FormEventHandler<HTMLFormElement> = (event)=> {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         AuthSubscriber.publish("login", { name: formData.get("name"), role: formData.get("role") });
-        navigate(formData.get("role") === "agent" ? "/agent" : "/client")
     }
     return (
         <div className="bg-white-250 w-full h-full flex items-center justify-center">

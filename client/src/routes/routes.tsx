@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Client from "../pages/client/client";
 import AuthService, { user } from "../pages/client/services/auth.service";
 import Subscribe from "../pages/client/utils/subscriber";
@@ -12,17 +12,18 @@ const Auth = new AuthService();
 
 export default function AppRoutes() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!Auth.getUser());
+  const navigate = useNavigate();
   useEffect(() => {
     AuthSubscriber.subscribe("login", (data) => {
-      console.log("Login ...");
       const user = data as user;
+      console.log(user);
       Auth.setUser(user);
       setIsLoggedIn(!!data);
+      navigate(user.role === "agent" ? "/webapp" : "/client")
     });
   }, []);
-  console.log("isLoggged: ", isLoggedIn);
   return (
-    <BrowserRouter>
+
       <Routes>
         <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
           <Route path="/client" element={<Client />} />
@@ -31,6 +32,6 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </BrowserRouter>
+   
   );
 }
