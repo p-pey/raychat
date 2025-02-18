@@ -106,7 +106,7 @@ io.on("connection", (socket: Socket) => {
   // Handle agent message
   socket.on(
     "agent-message",
-    ({ clientId, text }: { clientId: string; text: string }) => {
+    ({ clientId, text }: { clientId: string; text: string }, callback) => {
       const message: Message = {
         id: Date.now().toString(),
         text,
@@ -126,6 +126,7 @@ io.on("connection", (socket: Socket) => {
           io.to(`user-${clientId}`).emit("message", message);
         }
       }
+      callback(message);
     }
   );
 

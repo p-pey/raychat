@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Client from "../pages/client/client";
-import AuthService, { user } from "../pages/client/services/auth.service";
-import Subscribe from "../pages/client/utils/subscriber";
+import AuthService, { user } from "../services/auth.service";
+import Subscribe from "../utils/subscriber";
 import Login from "../pages/login/login";
 import Agent from "../pages/webapp/webapp";
 import ProtectedRoute from "./protectedRoute";

@@ -1,5 +1,5 @@
-import { dialog } from "../components/chatContent";
-import AuthService, { user } from "../services/auth.service";
+import AuthService from "../../../services/auth.service";
+import { authUser, dialog } from "../../../types/types";
 import SocketService from "../services/socket.service";
 
 export default class SocketProxy {
@@ -11,7 +11,7 @@ export default class SocketProxy {
   }
 
   static register() {
-    const user = this._auth.getUser() as user;
+    const user = this._auth.getUser() as authUser;
     if (!user) {
       throw new Error("User Not Found!");
     }
@@ -22,7 +22,7 @@ export default class SocketProxy {
   }
 
   static sendMessage(text: string) {
-    const user = this._auth.getUser() as user;
+    const user = this._auth.getUser() as authUser;
     if (!user) {
       throw new Error("User Not Found!");
     }
@@ -43,7 +43,7 @@ export default class SocketProxy {
       };
     }) => void
   ) {
-    const user = this._auth.getUser() as user;
+    const user = this._auth.getUser() as authUser;
     if (!user) {
       throw new Error("User Not Found!");
     }

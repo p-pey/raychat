@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { SocketSubscriber } from "../useClient";
 import ChatMapper from "./chat.mapper";
 import Dialog from "./dialog";
-export type dialog = {
-  clientId: string;
-  id: string;
-  isFromAgent: boolean;
-  text: string;
-  timestamp: string;
-};
+import { dialog } from "../../../types/types";
 
 export default function ChatContent() {
   const [dialogs, setDialogs] = useState<dialog[] | null>(null);
@@ -34,7 +28,7 @@ export default function ChatContent() {
     };
   }, []);
   return (
-    <main className="flex flex-col gap-2 max-h-full overflow-auto">
+    <main className="flex flex-col gap-2 max-h-[80%] overflow-x-hidden h-full mb-auto overflow-y-auto">
       { dialogs === null ? <h1 className="mx-auto font-medium">... درحال دریافت  </h1> : dialogs.length === 0 ? <h1 className="font-medium text-center m-auto"> اولین پیام را ارسال کنید </h1> : dialogs.map((dialog) => {
         return (
           <Dialog key={dialog.id} date={ dialog.timestamp } isPrimary={!dialog.isFromAgent}>

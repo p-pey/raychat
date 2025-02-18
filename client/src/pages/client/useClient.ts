@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import SocketProxy from "./proxy/socket.proxy";
-import Subscribe from "./utils/subscriber";
-import { dialog } from "./components/chatContent";
+import Subscribe from "../../utils/subscriber";
+import { dialog } from "../../types/types";
+
 export const SocketSubscriber = new Subscribe();
 
 export default function useClient() {

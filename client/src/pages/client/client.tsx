@@ -10,7 +10,7 @@ export default function Client() {
       <div className="w-full h-full lg:w-[366px] lg:h-[528px]">
         <div className="flex flex-col justify-between rounded-xl overflow-hidden border border-white-250 h-full w-full">
           <ChatInfo />
-          <div className="p-2 flex flex-col gap-4 max-h-full scroll">
+          <div className="p-2 flex flex-col justify-between gap-4 h-full max-h-[85%] scroll">
             <ChatContent />
             <ChatControl />
           </div>

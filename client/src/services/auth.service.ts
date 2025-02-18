@@ -1,11 +1,6 @@
 import { v4 } from "uuid";
 import { Storage, StorageService } from "./storage.service";
-
-export type user = {
-  name: string;
-  id: string;
-  role: "agent" | "user";
-};
+import { authUser } from "../types/types";
 
 export default class AuthService {
   private _storage: Storage;
@@ -16,19 +11,18 @@ export default class AuthService {
     return v4();
   }
 
-  setUser(user: user) {
+  setUser(user: authUser) {
     this._storage.setItem(
       "user",
       JSON.stringify({ ...user, id: this.generateUserId() })
     );
   }
-  getUser(): user | undefined {
+  getUser(): authUser | undefined {
     const user = this._storage.getItem("user");
     if (user) {
       return JSON.parse(user);
     } else {
-      return undefined
+      return undefined;
     }
-
   }
 }
