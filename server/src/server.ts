@@ -1,7 +1,7 @@
+import cors from "cors";
 import express from "express";
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
-import cors from "cors";
 import { Client, Conversation, Message } from "./interfaces";
 
 const app = express();
@@ -154,34 +154,34 @@ io.on("connection", (socket: Socket) => {
   // Get conversations for a specific client
   socket.on(
     "get-client-conversations",
-    (payload: { clientId: string }[], callback) => {
-      const { clientId } = payload[0];
-      console.log("Fetching conversations for client:", clientId);
+    (payload: { clientId: string }[], callback: (response: { success: boolean, error?: string, data?: unknown[] }) => void;) => {
+  const { clientId } = payload[0];
+  console.log("Fetching conversations for client:", clientId);
 
-      // Check if requester is authorized (is the client or the agent)
-      const isClient = clients.get(clientId)?.socketId === socket.id;
-      const isAgent = agent?.id === socket.id;
+  // Check if requester is authorized (is the client or the agent)
+  const isClient = clients.get(clientId)?.socketId === socket.id;
+  const isAgent = agent?.id === socket.id;
 
-      if (!isClient && !isAgent) {
-        return callback({
-          success: false,
-          error: "Unauthorized to view these conversations",
-        });
-      }
+  if (!isClient && !isAgent) {
+    return callback({
+      success: false,
+      error: "Unauthorized to view these conversations",
+    });
+  }
 
-      const conversation = conversations.get(clientId);
-      if (!conversation) {
-        return callback({
-          success: false,
-          error: "Conversations not found",
-        });
-      }
+  const conversation = conversations.get(clientId);
+  if (!conversation) {
+    return callback({
+      success: false,
+      error: "Conversations not found",
+    });
+  }
 
-      callback({
-        success: true,
-        data: conversation,
-      });
-    }
+  callback({
+    success: true,
+    data: conversation,
+  });
+}
   );
 });
 

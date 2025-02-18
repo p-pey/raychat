@@ -16,7 +16,6 @@ export default class SocketProxy {
   static register() {
     const user = this._auth.getUser() as user;
     if (!user) {
-      this._socketInstance.disconnect();
       throw new Error("User Not Found!");
     }
     this._socketInstance.emit("register-user", {
@@ -28,7 +27,6 @@ export default class SocketProxy {
   static sendMessage(text: string) {
     const user = this._auth.getUser() as user;
     if (!user) {
-      this._socketInstance.disconnect();
       throw new Error("User Not Found!");
     }
     this._socketInstance.emit("user-message", {
@@ -37,18 +35,20 @@ export default class SocketProxy {
     });
   }
 
-  static getMessages() {
+  static getMessages(
+    callback: (args: { success: boolean, data: unknown[], error?: string }) => void
+  ) {
     const user = this._auth.getUser() as user;
     if (!user) {
-      this._socketInstance.disconnect();
       throw new Error("User Not Found!");
     }
     this._socketInstance.emit("get-client-conversations", {
       clientId: user.id,
-    });
+    }, callback);
   }
 
   static disconnect() {
+    console.log("--------------- disconnect")
     return this._socketInstance.disconnect();
   }
 }

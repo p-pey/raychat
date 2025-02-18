@@ -23,6 +23,12 @@ export default class AuthService {
     );
   }
   getUser(): user | undefined {
-    return JSON.parse(this._storage.getItem("user") ?? "");
+    const user = this._storage.getItem("user");
+    if (user) {
+      return JSON.parse(user);
+    } else {
+      return undefined
+    }
+
   }
 }

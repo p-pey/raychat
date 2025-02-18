@@ -1,28 +1,10 @@
-import { useEffect } from "react";
 import ChatContent from "./components/chatContent";
 import ChatControl from "./components/chatControl";
 import ChatInfo from "./components/chatInfo";
-import SocketProxy from "./proxy/socket.proxy";
-import Subscribe from "./utils/subscriber";
+import useClient from "./useClient";
 
-export const SocketSubscriber = new Subscribe();
- const Socket = SocketProxy.connect();
- SocketProxy.register();
- SocketProxy.getMessages()
-
- export default function Client() {
-   useEffect(()=> {
-    SocketSubscriber.publish("connect", true);
-    Socket.on("disconnect", ()=> {
-      SocketSubscriber.publish("connect", false);
-    });
-    Socket.on("message", (response)=> {
-      SocketSubscriber.publish("message", response);
-    });
-    Socket.on("get-client-conversations", (response)=> {
-      SocketSubscriber.publish("messages", response);
-    })
-  }, [])
+export default function Client() {
+  useClient();
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="w-full h-full lg:w-[366px] lg:h-[528px]">
