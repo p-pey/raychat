@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import Subscribe from "../../utils/subscriber";
-import SocketProxy from "./proxy/socket.proxy";
 import { dialog, userConversation } from "../../types/types";
+import SocketProxy from "./proxy/socket.proxy";
 import { UsersMapper } from "./users.mapper";
 
-export const SocketSubscriber = new Subscribe();
 
 export default function useWebapp() {
   const [selectedUser, setSelectedUser] = useState<userConversation | null>(
@@ -34,7 +32,6 @@ export default function useWebapp() {
 
   useEffect(() => {
     SocketProxy.register();
-    SocketSubscriber.publish("connect", true);
     SocketProxy.onConversations((response) => {
       setUsers(
         UsersMapper.mapConversationsToUser(
@@ -68,9 +65,7 @@ export default function useWebapp() {
         });
       });
     });
-    SocketProxy.onDisconnect(() => {
-      SocketSubscriber.publish("connect", false);
-    });
+
   }, []);
   return {
     users,
